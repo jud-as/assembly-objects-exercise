@@ -40,20 +40,91 @@ Objeto solicitarInfos() {
 }
 
 
-int main() {
-
-    solicitarInfos();
-    return 0;
+void imprimirObjeto(Objeto o) {
+    printf("\nNome: %sQuantidade de pecas: %d\n", o.nomeObj, o.qntdPecas);
+    for (int i = 0; i < o.qntdPecas; i++)
+    {
+        printf("%s\n", o.pecas[i].nomePeca);
+    }    
 }
 
-
-/**** empilhar(No *topo) {
+No* empilhar(No *topo) {
     No *novo = malloc(sizeof(No));
-
-    if(novo) {
-        novo->o = solicitarInfos();
-    } else {
-        printf("\nErro ao alocar memoria.");
-    }
     
-}*/
+    if (novo)
+    {
+        novo->o = solicitarInfos();
+        novo->proximo = topo;
+        return novo;
+    } else {
+        printf("Erro de alocacao de memoria.");
+    }
+    return NULL;
+
+}
+
+No* desempilhar(No **topo) {
+    if (*topo != NULL)
+    {
+        No *remover = *topo;
+        *topo = remover->proximo;
+        return remover;
+    } else {
+        printf("\nPilha vazia!");
+    }
+    return NULL;
+    
+}
+
+void imprimir_pilha(No *topo) {
+    printf("\n---------------- PILHA -----------------\n");
+    while (topo)
+    {
+        imprimirObjeto(topo->o);
+        topo = topo->proximo;   
+    }
+    printf("\n-------------- FIM PILHA ---------------\n");
+}
+
+int main() {
+
+    No *remover, *topo = NULL;
+    int opcao;
+
+    do
+    {
+        printf("\n0 - Sair\n1 - Empilhar\n2 - Desempilhar\n3 - Imprimir\n");
+        scanf("%d", &opcao);
+        getchar();
+        
+        switch (opcao)
+        {
+        case 1:
+            topo = empilhar(topo);         
+            break;
+        case 2:
+            remover = desempilhar(&topo);
+            if (remover)
+            {
+                printf("\nElemento removido com sucesso.\n");
+                imprimirObjeto(remover->o);
+            }
+            else
+            {
+                printf("\nSem no para remover.");
+            }
+            break;
+        case 3:
+                imprimir_pilha(topo);
+            break;
+        
+        default:
+            if (opcao != 0)
+            {
+                printf("\nOpcao invalida!\n");
+            }
+        }
+    } while (opcao != 0);
+
+    return 0;
+}
